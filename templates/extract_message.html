@@ -1,0 +1,68 @@
+
+{% extends "base.html" %}
+
+{% block title %}StegoGen - Extract Message{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Extract Hidden Message</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-search"></i> Extract Message</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="carrier_file" class="form-label">Carrier File with Hidden Message</label>
+                        <input type="file" class="form-control" id="carrier_file" name="carrier_file" required>
+                        <div class="form-text">Upload the file that contains the hidden message</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="start_bit" class="form-label">Start Bit (S)</label>
+                                <input type="number" class="form-control" id="start_bit" name="start_bit" value="0" min="0">
+                                <div class="form-text">Must match the original value used during hiding</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="periodicity" class="form-label">Periodicity (L)</label>
+                                <input type="number" class="form-control" id="periodicity" name="periodicity" value="8" min="1">
+                                <div class="form-text">Must match the original value used during hiding</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="mode" class="form-label">Mode (C)</label>
+                                <select class="form-select" id="mode" name="mode">
+                                    <option value="constant" selected>Constant</option>
+                                    <option value="alternating">Alternating</option>
+                                    <option value="increasing">Increasing</option>
+                                    <option value="fibonacci">Fibonacci</option>
+                                </select>
+                                <div class="form-text">Must match the original mode used during hiding</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> You must use the exact same parameters (S, L, and C) that were used to hide the message, otherwise extraction will fail or produce incorrect results.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Extract Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+
+{% extends "base.html" %}
+
+{% block title %}StegoGen - Home{% endblock %}
+
+{% block content %}
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold text-body-emphasis">Steganography Web Service</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Hide secret messages in your files using bit-level steganography.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('create_stego') }}" class="btn btn-primary btn-lg px-4 gap-3">Create Stego</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4 gap-3">Login</a>
+                <a href="{{ url_for('register') }}" class="btn btn-outline-secondary btn-lg px-4">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container px-4 py-5">
+    <h2 class="pb-2 border-bottom">Recent Uploads</h2>
+    
+    {% if posts %}
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+        {% for post in posts %}
+        <div class="col">
+            <div class="card h-100 post-card">
+                {% if post.is_image %}
+                <img src="{{ url_for('download_file', post_id=post.id) }}" class="card-img-top post-image" alt="{{ post.title }}">
+                {% else %}
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                    <i class="fas fa-file fa-5x text-secondary"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.description[:100] }}{% if post.description|length > 100 %}...{% endif %}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <small class="text-muted">By {{ post.author.username }}</small>
+                    <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info mt-3">
+        No steganography posts yet. {% if current_user.is_authenticated %}<a href="{{ url_for('create_stego') }}">Create one</a>!{% else %}Please <a href="{{ url_for('login') }}">login</a> to create one.{% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="container px-4 py-5">
+    <h2 class="pb-2 border-bottom">How It Works</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3 p-3 rounded">
+                <i class="fas fa-upload fa-fw"></i>
+            </div>
+            <div>
+                <h3 class="fs-2 text-body-emphasis">Upload Files</h3>
+                <p>Upload a carrier file (any format) and a secret message file that you want to hide.</p>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3 p-3 rounded">
+                <i class="fas fa-eye-slash fa-fw"></i>
+            </div>
+            <div>
+                <h3 class="fs-2 text-body-emphasis">Hide Messages</h3>
+                <p>The message is hidden in the carrier file using bit-level steganography with customizable parameters.</p>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3 p-3 rounded">
+                <i class="fas fa-share-alt fa-fw"></i>
+            </div>
+            <div>
+                <h3 class="fs-2 text-body-emphasis">Share Securely</h3>
+                <p>Download the modified file or share it publicly, while only those with proper parameters can extract the hidden message.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
